@@ -105,7 +105,7 @@ def send_reminder(date):
 	twitter.update_status(status="The Fore River Bridge will be opening soon at " + date.strftime("%-I:%M %P") + SUFFIX)
 
 openings = []
-
+print("Server started")
 while(True):
 	
 	messages = getEmails("subject:Fore River Bridge is:unread")
@@ -116,7 +116,7 @@ while(True):
 			send_notice(date);
 	for opening in openings:
 		# happening within 30 min and not in the past
-		if opening - datetime.now() < timedelta(minutes=30) and opening - datetime.now() > timedelta(minutes=0):
+		if opening - datetime.now() < timedelta(minutes=37) and opening - datetime.now() > timedelta(minutes=0):
 			openings.remove(opening);
 			send_reminder(opening)
 	# sleep for fifteen minutes
