@@ -6,6 +6,7 @@ __pycache__/
 # auth codes
 auth.py
 token.pickle
+credentials.json
 
 # C extensions
 *.so

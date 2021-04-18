@@ -107,8 +107,12 @@ def send_reminder(date):
 openings = []
 print("Server started")
 while(True):
-	
-	messages = getEmails("subject:Fore River Bridge is:unread")
+	# if connection fails, sleep for 5 and try again.
+	try:
+		messages = getEmails("subject:Fore River Bridge is:unread")
+	except:
+		time.sleep(5*60)
+		break;
 	for message in messages:
 		dates = getDates(message)
 		for date in dates:
