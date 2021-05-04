@@ -38,6 +38,7 @@ def getEmails(query):
 	# If credentials are not available or are invalid, ask the user to log in.
 	if not creds or not creds.valid:
 		if creds and creds.expired and creds.refresh_token:
+			print("Refreshing token")
 			creds.refresh(Request())
 		else:
 			flow = InstalledAppFlow.from_client_secrets_file('credentials.json', SCOPES)
@@ -108,9 +109,14 @@ openings = []
 print("Server started")
 while(True):
 	# if connection fails, sleep for 5 and try again.
+	print("Getting messages")
 	try:
 		messages = getEmails("subject:Fore River Bridge is:unread")
-	except:
+		print("Successfully got messages from gmail: " + str(len(messages)))
+	except Exception as e:
+		print("Failed to get messages from gmail")
+		print("Fatal:")
+		print(e)
 		time.sleep(5*60)
 		break;
 	for message in messages:
