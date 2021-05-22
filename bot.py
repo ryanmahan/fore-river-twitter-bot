@@ -118,7 +118,6 @@ while(True):
 		print("Fatal:")
 		print(e)
 		time.sleep(5*60)
-		break;
 	for message in messages:
 		dates = getDates(message)
 		for date in dates:
