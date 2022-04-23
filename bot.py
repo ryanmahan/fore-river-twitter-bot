@@ -3,17 +3,14 @@ from googleapiclient.discovery import build
 from google_auth_oauthlib.flow import InstalledAppFlow
 from google.auth.transport.requests import Request
 import pickle
-import os.path
+from os import (
+	path,
+	environ
+)
 import base64
 import re
 import dateutil.parser
 from twython import Twython
-from auth import (
-	consumer_key,
-	consumer_secret,
-	access_token,
-	access_token_secret
-)
 import time
 from datetime import datetime, timedelta
 
@@ -29,7 +26,7 @@ def getEmails(query):
 
 	# The file token.pickle contains the user access token.
 	# Check if it exists
-	if os.path.exists('token.pickle'):
+	if path.exists('token.pickle'):
 
 		# Read the token from the file and store it in the variable creds
 		with open('token.pickle', 'rb') as token:
@@ -42,7 +39,7 @@ def getEmails(query):
 			creds.refresh(Request())
 		else:
 			flow = InstalledAppFlow.from_client_secrets_file('credentials.json', SCOPES)
-			creds = flow.run_local_server(port=0)
+			creds = flow.run_local_server(port=55033)
 
 		# Save the access token in token.pickle file for the next run
 		with open('token.pickle', 'wb') as token:
@@ -91,10 +88,10 @@ def getDates(text):
 	return dates
 
 twitter = Twython(
-		consumer_key,
-		consumer_secret,
-		access_token,
-		access_token_secret
+		environ.get("TWYTHON_CONSUMER_KEY"),
+		environ.get("TWYTHON_CONSUMER_SECRET"),
+		environ.get("TWYTHON_ACCESS_TOKEN"),
+		environ.get("TWYTHON_ACCESS_TOKEN_SECRET")
 	)
 
 SUFFIX = "\n#ForeRiverBridge #traffic"
