@@ -17,7 +17,7 @@ from datetime import datetime, timedelta
 
 # Define the SCOPES. If modifying it, delete the token.pickle file.
 SCOPES = ['https://www.googleapis.com/auth/gmail.modify']
-OUTPUT = open("logfile.txt")
+OUTPUT = open("logfile.txt", 'a')
 
 def log(message, severity = "INFO"):
 	timestamp = datetime.now().strftime("%m/%d/%y %H:%M:%S")
@@ -118,7 +118,7 @@ while(True):
 	log("Getting messages")
 	try:
 		messages = getEmails("subject:Fore River Bridge is:unread")
-		print("Successfully got messages from gmail: " + str(len(messages)))
+		log("Successfully got messages from gmail: " + str(len(messages)))
 	except Exception as e:
 		log("Failed to get messages from gmail", "ERROR")
 		log(e, "ERROR")
