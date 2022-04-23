@@ -17,6 +17,13 @@ from datetime import datetime, timedelta
 
 # Define the SCOPES. If modifying it, delete the token.pickle file.
 SCOPES = ['https://www.googleapis.com/auth/gmail.modify']
+OUTPUT = open("logfile.txt")
+
+def log(message, severity = "INFO"):
+	timestamp = datetime.now().strftime("%m/%d/%y %H:%M:%S")
+	line = "[" + severity + "][" + timestamp + "] " + message
+	print(line)
+	OUTPUT.write(line + "\n");
 
 
 def getEmails(query):
@@ -97,23 +104,24 @@ twitter = Twython(
 SUFFIX = "\n#ForeRiverBridge #traffic"
 
 def send_notice(date):
+	log("Tweeting notice for " + date)
 	twitter.update_status(status="The Fore River Bridge will open at " + date + SUFFIX);
 
 def send_reminder(date):
+	log("Tweeting reminder for " + date.strftime("%-I:%M %P"))
 	twitter.update_status(status="The Fore River Bridge will be opening soon at " + date.strftime("%-I:%M %P") + SUFFIX)
 
 openings = []
-print("Server started")
+log("Server started")
 while(True):
 	# if connection fails, sleep for 5 and try again.
-	print("Getting messages")
+	log("Getting messages")
 	try:
 		messages = getEmails("subject:Fore River Bridge is:unread")
 		print("Successfully got messages from gmail: " + str(len(messages)))
 	except Exception as e:
-		print("Failed to get messages from gmail")
-		print("Fatal:")
-		print(e)
+		log("Failed to get messages from gmail", "ERROR")
+		log(e, "ERROR")
 		time.sleep(5*60)
 	for message in messages:
 		dates = getDates(message)
