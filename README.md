@@ -1,6 +1,8 @@
 # fore-river-twitter-bot
 A twitter bot to tweet when the MA Fore River Bridge is raised and closed. Using the local news source [The Patriot Ledger](https://www.patriotledger.com/) as a datasource. The bot monitors a GMail address for email notifications from The Patriot Ledger and parses them for opening times. It tweets when it gets an opening scheduled and stores the information in memory to later tweet a reminder.
 
+[Follow it on twitter!](https://twitter.com/ForeRiver_3A)
+
 ## Hosting
 
 Currently the bot is hosted on a raspberry pi 3B in my home, running with [daemon tools'](https://cr.yp.to/daemontools.html) [supervise](https://cr.yp.to/daemontools/supervise.html) for some better fault tolerance. I tried using a docker image, but my Pi is already overloaded between this and some other services I have on it, so the overhead for Docker wasn't worth it. Supervise was a nice alternative that will restart the service when it fails.
