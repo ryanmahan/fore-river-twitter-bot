@@ -61,7 +61,7 @@ def log(message, severity = "INFO"):
 		email = EmailMessage()
 		email.set_content(message)
 		email['To'] = environ.get("OWNER_EMAIL")
-		email['From'] = 'foreriverbridgeopenings@gmail.com'
+		email['From'] = environ.get("BOT_EMAIL")
 		email['Subject'] = 'Fore River Bot Failure'
 
 		encoded_email = base64.urlsafe_b64encode(email.as_bytes()).decode()
