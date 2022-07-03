@@ -3,9 +3,13 @@ A twitter bot to tweet when the MA Fore River Bridge is raised and closed. Using
 
 [Follow it on twitter!](https://twitter.com/ForeRiver_3A)
 
+## Can you help?
+
+I'm currently looking for a more reliable data source for bridge opening notifications. If you are aware of one, or know someone who might be aware of one, please reach out and let me know! 
+
 ## Hosting
 
-Currently the bot is hosted on a raspberry pi 3B in my home, running with [daemon tools'](https://cr.yp.to/daemontools.html) [supervise](https://cr.yp.to/daemontools/supervise.html) for some better fault tolerance. I tried using a docker image, but my Pi is already overloaded between this and some other services I have on it, so the overhead for Docker wasn't worth it. Supervise was a nice alternative that will restart the service when it fails.
+Currently the bot is hosted on a raspberry pi 3B in my home, using a `systemd` service to start on reboots. It logs to a local `logfile.txt` and to `stdout` for `journalctl`. I tried bringing this over into a docker container for the pi, but I'm stretching the pi between a few services and didn't want to stress it with more overhead. This system has been working well so far. I monitor errors on the system through email alerts from my logging function, but these don't notify me of system-wide crashes. I can usually pick up on system-wide crashes because of the other services that run on the pi.
 
 ## Possible Enhancements
 
