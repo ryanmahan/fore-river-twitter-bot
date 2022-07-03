@@ -5,7 +5,7 @@ A twitter bot to tweet when the MA Fore River Bridge is raised and closed. Using
 
 ## Can you help?
 
-I'm currently looking for a more reliable data source for bridge opening notifications. If you are aware of one, or know someone who might be aware of one, please reach out and let me know! 
+I'm currently looking for a more reliable data source for bridge opening notifications. If you are aware of one, or know someone who might be aware of one, please reach out and let me know! DMs are open on twitter.
 
 ## Hosting
 
