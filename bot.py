@@ -2,6 +2,7 @@
 from googleapiclient.discovery import build
 from google_auth_oauthlib.flow import InstalledAppFlow
 from google.auth.transport.requests import Request
+from email.message import EmailMessage
 import pickle
 from os import (
 	path,
@@ -17,46 +18,61 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-
 # Define the SCOPES. If modifying it, delete the token.pickle file.
 SCOPES = ['https://www.googleapis.com/auth/gmail.modify']
 OUTPUT = open("logfile.txt", 'a')
 
+creds = None
+
+# The file token.pickle contains the user access token.
+# Check if it exists
+if path.exists('token.pickle'):
+
+	# Read the token from the file and store it in the variable creds
+	with open('token.pickle', 'rb') as token:
+		creds = pickle.load(token)
+
+# If credentials are not available or are invalid, ask the user to log in.
+if not creds or not creds.valid:
+	if creds and creds.expired and creds.refresh_token:
+		print("Refreshing token")
+		creds.refresh(Request())
+	else:
+		flow = InstalledAppFlow.from_client_secrets_file('credentials.json', SCOPES)
+		creds = flow.run_local_server(port=55033)
+
+	with open('token.pickle', 'wb') as token:
+		pickle.dump(creds, token)
+
+# Connect to the Gmail API
+service = build('gmail', 'v1', credentials=creds)
+
 def log(message, severity = "INFO"):
+	if not isinstance(message, str):
+			message = str(message)
+
 	timestamp = datetime.now().strftime("%m/%d/%y %H:%M:%S")
 	line = "[" + severity + "][" + timestamp + "] " + message
 	print(line)
 	OUTPUT.write(line + "\n");
+	if (severity == "ERROR"):
+
+		
+		email = EmailMessage()
+		email.set_content(message)
+		email['To'] = environ.get("OWNER_EMAIL")
+		email['From'] = 'foreriverbridgeopenings@gmail.com'
+		email['Subject'] = 'Fore River Bot Failure'
+
+		encoded_email = base64.urlsafe_b64encode(email.as_bytes()).decode()
+		create_message = {
+			'raw': encoded_email
+		}
+		service.users().messages().send(userId='me', body=create_message).execute()
+
 
 
 def getEmails(query):
-	# Variable creds will store the user access token.
-	# If no valid token found, we will create one.
-	creds = None
-
-	# The file token.pickle contains the user access token.
-	# Check if it exists
-	if path.exists('token.pickle'):
-
-		# Read the token from the file and store it in the variable creds
-		with open('token.pickle', 'rb') as token:
-			creds = pickle.load(token)
-
-	# If credentials are not available or are invalid, ask the user to log in.
-	if not creds or not creds.valid:
-		if creds and creds.expired and creds.refresh_token:
-			print("Refreshing token")
-			creds.refresh(Request())
-		else:
-			flow = InstalledAppFlow.from_client_secrets_file('credentials.json', SCOPES)
-			creds = flow.run_local_server(port=55033)
-
-		# Save the access token in token.pickle file for the next run
-		with open('token.pickle', 'wb') as token:
-			pickle.dump(creds, token)
-
-	# Connect to the Gmail API
-	service = build('gmail', 'v1', credentials=creds)
 	# request a list of all the messages
 	result = service.users().messages().list(userId='me', q=query).execute()
 	# We can also pass maxResults to get any number of emails. Like this:
@@ -107,12 +123,18 @@ twitter = Twython(
 SUFFIX = "\n#ForeRiverBridge #traffic"
 
 def send_notice(date):
-	log("Tweeting notice for " + date)
-	twitter.update_status(status="The Fore River Bridge will open at " + date + SUFFIX);
+	try:
+		log("Tweeting notice for " + date)
+		twitter.update_status(status="The Fore River Bridge will open at " + date + SUFFIX);
+	except Exception as e:
+		log(e, "ERROR")
 
 def send_reminder(date):
-	log("Tweeting reminder for " + date.strftime("%-I:%M %P"))
-	twitter.update_status(status="The Fore River Bridge will be opening soon at " + date.strftime("%-I:%M %P") + SUFFIX)
+	try:
+		log("Tweeting reminder for " + date.strftime("%-I:%M %P"))
+		twitter.update_status(status="The Fore River Bridge will be opening soon at " + date.strftime("%-I:%M %P") + SUFFIX)
+	except Exception as e:
+		log(e, "ERROR")
 
 openings = []
 log("Server started")
