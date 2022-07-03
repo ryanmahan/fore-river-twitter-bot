@@ -32,7 +32,7 @@ if path.exists("token.pickle"):
 # If credentials are not available or are invalid, ask the user to log in.
 if not creds or not creds.valid:
     if creds and creds.expired and creds.refresh_token:
-        print("Refreshing token")
+        log("Refreshing token")
         creds.refresh(Request())
     else:
         flow = InstalledAppFlow.from_client_secrets_file("credentials.json", SCOPES)

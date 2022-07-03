@@ -1,0 +1,6 @@
+[INFO][07/03/22 14:47:54] Server started
+[INFO][07/03/22 14:47:54] Getting messages
+[INFO][07/03/22 14:47:54] Successfully got messages from gmail: 0
+[INFO][07/03/22 14:48:18] Server started
+[INFO][07/03/22 14:48:18] Getting messages
+[INFO][07/03/22 14:48:18] Successfully got messages from gmail: 0
