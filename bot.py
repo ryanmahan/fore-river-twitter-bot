@@ -151,6 +151,7 @@ def send_reminder(date):
 
 openings = []
 log("Server started")
+OUTPUT.flush()
 while True:
     # if connection fails, sleep for 5 and try again.
     log("Getting messages")
