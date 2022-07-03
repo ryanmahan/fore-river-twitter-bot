@@ -12,6 +12,7 @@ Currently the bot is hosted on a raspberry pi 3B in my home, running with [daemo
 - [ ] More persistent storage of reminders so they can be tweeted even if the app crashes
 - [ ] Rewrite in Cython to learn more about Cython and to make the runtime lighter weight
 - [ ] Store when the bridge is scheduled to open to look at fun stats and posisbly make a webapp to provide them to the locals
+- [ ] Testing
 - [ ] More reliable or first-party data source. (If you're looking at this and know someone at the MA DOT who could help with this, please contact me!)
-- [X] Better logging
+- [X] Better logging, including sending emails on error
 - [X] Better/more fault tolerant hosting for stability. Internet outages and power outages to this Pi has caused issues in the past.
