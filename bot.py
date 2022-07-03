@@ -13,6 +13,9 @@ import dateutil.parser
 from twython import Twython
 import time
 from datetime import datetime, timedelta
+from dotenv import load_dotenv
+
+load_dotenv()
 
 
 # Define the SCOPES. If modifying it, delete the token.pickle file.
