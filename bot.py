@@ -21,6 +21,26 @@ OUTPUT = open("logfile.txt", "a")
 
 creds = None
 
+def log(message, severity="INFO"):
+    if not isinstance(message, str):
+        message = str(message)
+
+    timestamp = datetime.now().strftime("%m/%d/%y %H:%M:%S")
+    line = "[" + severity + "][" + timestamp + "] " + message
+    print(line)
+    OUTPUT.write(line + "\n")
+    if severity == "ERROR":
+        email = EmailMessage()
+        email.set_content(message)
+        email["To"] = environ.get("OWNER_EMAIL")
+        email["From"] = environ.get("BOT_EMAIL")
+        email["Subject"] = "Fore River Bot Failure"
+
+        encoded_email = base64.urlsafe_b64encode(email.as_bytes()).decode()
+        create_message = {"raw": encoded_email}
+        service.users().messages().send(userId="me", body=create_message).execute()
+
+
 # The file token.pickle contains the user access token.
 # Check if it exists
 if path.exists("token.pickle"):
@@ -43,26 +63,6 @@ if not creds or not creds.valid:
 
 # Connect to the Gmail API
 service = build("gmail", "v1", credentials=creds)
-
-
-def log(message, severity="INFO"):
-    if not isinstance(message, str):
-        message = str(message)
-
-    timestamp = datetime.now().strftime("%m/%d/%y %H:%M:%S")
-    line = "[" + severity + "][" + timestamp + "] " + message
-    print(line)
-    OUTPUT.write(line + "\n")
-    if severity == "ERROR":
-        email = EmailMessage()
-        email.set_content(message)
-        email["To"] = environ.get("OWNER_EMAIL")
-        email["From"] = environ.get("BOT_EMAIL")
-        email["Subject"] = "Fore River Bot Failure"
-
-        encoded_email = base64.urlsafe_b64encode(email.as_bytes()).decode()
-        create_message = {"raw": encoded_email}
-        service.users().messages().send(userId="me", body=create_message).execute()
 
 
 def getEmails(query):

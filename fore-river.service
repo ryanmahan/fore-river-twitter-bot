@@ -1,0 +1,11 @@
+[Unit]
+Description=Fore River Twitter bot
+
+[Service]
+User=pi
+WorkingDirectory=/home/pi/fore-river-twitter-bot
+ExecStart=/usr/bin/python3 /home/pi/fore-river-twitter-bot/bot.py
+Restart=always
+
+[Install]
+WantedBy=multi-user.target
